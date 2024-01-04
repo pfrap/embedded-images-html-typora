@@ -1,8 +1,17 @@
-# Export html with self contained images from Typora
- Script for exporting an html with embedded images from Typora.
- Copy and modified from other professionist: please see [github.com/typora/typora-issues/issues/3656](https://github.com/typora/typora-issues/issues/3656)
+import base64
+import re
+import os
+from datetime import datetime
 
-``` python
+def log_progress(message):
+    ''' This function logs the mentioned message of a given stage of the
+    code execution to a log file. Function returns nothing'''
+    timestamp_format='%Y-%h-%d-%H:%M:%S' 
+    now=datetime.now()
+    timestamp=now.strftime(timestamp_format)
+    with open ("log_file.txt","a") as f:
+        f.write(f"{timestamp}: {message}\n")
+        
 def encode_images_to_base64(input_file, output_file):
     """This function embed images into html export of Typora"""
     with open(input_file, 'r', encoding='utf-8') as md_file:
@@ -36,4 +45,10 @@ def encode_images_to_base64(input_file, output_file):
     # Write the updated markdown content to the output file
     with open(output_file, 'w', encoding='utf-8') as html_file:
         html_file.write(html_content)
-```
+
+if __name__ == "__main__":
+    import sys
+    input_md_file = sys.argv[1]
+    output_html_file = sys.argv[2]
+
+    encode_images_to_base64(input_md_file, output_html_file)
